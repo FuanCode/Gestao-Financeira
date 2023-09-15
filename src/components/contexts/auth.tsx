@@ -1,49 +1,66 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, ReactNode } from "react";
 
-export const AuthContext = createContext({});
+interface User {
+  email: string;
+  password: string;
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState();
+interface AuthContextType {
+  user: User | null;
+  signed: boolean;
+  signin: (email: string, password: string) => void;
+  signup: (email: string, password: string) => void;
+  signout: () => void;
+}
+
+export const AuthContext = createContext<AuthContextType | null>(null);
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const userToken = localStorage.getItem("user_token");
     const usersStorage = localStorage.getItem("users_bd");
 
     if (userToken && usersStorage) {
-      const hasUser = JSON.parse(usersStorage)?.filter(
-        (user) => user.email === JSON.parse(userToken).email
+      const hasUser = JSON.parse(usersStorage)?.find(
+        (user: User) => user.email === JSON.parse(userToken).email
       );
 
-      if (hasUser) setUser(hasUser[0]);
+      if (hasUser) setUser(hasUser);
     }
   }, []);
 
-  const signin = (email, password) => {
-    const usersStorage = JSON.parse(localStorage.getItem("users_bd"));
+  const signin = (email: string, password: string) => {
+    const usersStorage = JSON.parse(localStorage.getItem("users_bd") ||  "");
 
-    const hasUser = usersStorage?.filter((user) => user.email === email);
+    const hasUser = usersStorage?.find((user: User) => user.email === email);
 
-    if (hasUser?.length) {
-      if (hasUser[0].email === email && hasUser[0].password === password) {
+    if (hasUser) {
+      if (hasUser.email === email && hasUser.password === password) {
         const token = Math.random().toString(36).substring(2);
         localStorage.setItem("user_token", JSON.stringify({ email, token }));
         setUser({ email, password });
         return;
       } else {
-        return "Senha ou Email incorreto! Voce pode se registrar clicando em Registre-se";
+        return "Senha ou Email incorreto! Você pode se registrar clicando em Registre-se";
       }
     } else {
-      return "Usuario Inexistente. Registre-se";
+      return "Usuário Inexistente. Registre-se";
     }
   };
 
-  const signup = (email, password) => {
-    const usersStorage = JSON.parse(localStorage.getItem("users_bd"));
+  const signup = (email: string, password: string) => {
+    const usersStorage = JSON.parse(localStorage.getItem("users_bd") ||  "");  
 
-    const hasUser = usersStorage?.filter((user) => user.email === email);
+    const hasUser = usersStorage?.find((user: User) => user.email === email);
 
-    if (hasUser?.length) {
-      return "Este Email ja se encontra registrado! Voce pode acessar clicando em Entre";
+    if (hasUser) {
+      return "Este Email já se encontra registrado! Você pode acessar clicando em Entrar";
     }
 
     let newUser;
@@ -55,8 +72,6 @@ export const AuthProvider = ({ children }) => {
     }
 
     localStorage.setItem("users_bd", JSON.stringify(newUser));
-
-    return;
   };
 
   const signout = () => {

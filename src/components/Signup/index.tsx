@@ -1,45 +1,41 @@
 import React, { useState } from "react";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import Input from "../Input";
+import Button from "../Button";
 import * as C from "./styles";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../components/hooks/useAuth";
 
-const Signup = () => {
+interface AuthData {
+  signup?: (email: string, password: string) => string;
+}
+
+const Signup: React.FC = () => {
   const [email, setEmail] = useState("");
   const [emailConf, setEmailConf] = useState("");
   const [senha, setSenha] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
-  const { signup } = useAuth();
+  const authData = useAuth();
 
-  //Erros de criacao
+  //Erros de criação
   const handleSignup = () => {
-    if (!email | !emailConf | !senha) {
+    if (!email || !emailConf || !senha) {
       setError("Preencha todos os campos");
-      return;
     } else if (email !== emailConf) {
-      setError("Email preenchido precisam ser iguais");
-      return;
+      setError("Os campos de email precisam ser iguais");
+    } else {
+      // Caso não haja erro ele salvará os dados
+      if (authData != null && authData.signup) {
+        try {
+          const res = authData.signup(email, senha);
+          alert("Usuário cadastrado com sucesso!");
+          navigate("/");
+        } catch (e) {
+          setError("Função de cadastro não encontrada");
+        }
+      }
     }
-  //Erros de criacao
-
-  //Caso nao haja erro ele salvara os dados
-    const res = signup(email, senha);
-  //Caso nao haja erro ele salvara os dados
-
-    if (res) {
-      setError(res);
-      return;
-    }
-  //Info de usuario cadastrado  
-    alert("Usuário cadatrado com sucesso!");
-  //Info de usuario cadastrado
-  
-  //Retornando para tela de login
-    navigate("/");
-  //Retornando para tela de login  
   };
 
   return (
@@ -50,19 +46,25 @@ const Signup = () => {
           type="email"
           placeholder="Digite seu E-mail"
           value={email}
-          onChange={(e) => [setEmail(e.target.value), setError("")]}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setEmail(e.target.value)
+          }
         />
         <Input
           type="email"
           placeholder="Confirme seu E-mail"
           value={emailConf}
-          onChange={(e) => [setEmailConf(e.target.value), setError("")]}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setEmailConf(e.target.value)
+          }
         />
         <Input
           type="password"
           placeholder="Digite sua Senha"
           value={senha}
-          onChange={(e) => [setSenha(e.target.value), setError("")]}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSenha(e.target.value)
+          }
         />
         <C.labelError>{error}</C.labelError>
         <Button Text="Inscrever-se" onClick={handleSignup} />

@@ -1,9 +1,10 @@
-import React from 'react'
+import Signin from "../Signin"
+
 
 const LoginForm = () => {
   return (
     <div className=''>
-            Form login
+            <Signin/>
     </div>
   )
 }

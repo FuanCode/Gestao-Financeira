@@ -1,7 +1,14 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import * as C from "./styles";
 
-const Input = ({ type, placeholder, value, onChange }) => {
+interface InputProps {
+  type: string;
+  placeholder: string;
+  value: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Input: React.FC<InputProps> = ({ type, placeholder, value, onChange }) => {
   return (
     <C.Input
       value={value}
