@@ -3,36 +3,37 @@ import Input from "../Input";
 import Button from "../Button";
 import * as C from "./styles";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import Swal from "sweetalert2";
 
 interface AuthData {
   signin?: (email: string, password: string) => string;
 }
 
+
+
 const SigninForm: React.FC = () => {
 
-  const authData = useAuth();
-
-
-  const navigate = useNavigate();
+  let retrievedData = JSON.parse(sessionStorage.getItem("usuario_bd") || "{}");
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [error, setError] = useState<string>("");
+  const [error] = useState<string>("");
 
   const handleLogin = () => {
-    if (!email || !senha) {
-      setError("Preencha todos os campos");
-      return;
-    }
-
-    if (authData != null && authData.signin) {
-      try{
-        const res = authData.signin(email, senha);
-        navigate("/home");
-      }catch(e){
-        setError("Função de autenticação não encontrada");
-      }
+    if(retrievedData.email === email && retrievedData.senha === senha){
+      Swal.fire(
+        'Sucesso',
+        'Logado com sucesso.',
+        'success'
+      ).then(() => {
+        window.location.href = "/home";
+      });
+    }else{
+      Swal.fire(
+        'Erro',
+        'Usuário ou senha incorreta.',
+        'error'
+      );
     }
   };
 

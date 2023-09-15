@@ -46,10 +46,13 @@ const GestaoGastos = () => {
     setList(newList);
   }
 
+  let conta = JSON.parse(sessionStorage.getItem("usuario_bd") || "{}");
+
   return (
+    
     <C.Container>
       <C.Header>
-        <C.HeaderText>GGP - Gestao de Gastos Pessoais</C.HeaderText>
+        <C.HeaderText>Bem vindo: {conta.email} - GGP - Gestao de Gastos Pessoais</C.HeaderText>
       </C.Header>
       <C.Body>
         

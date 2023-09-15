@@ -2,40 +2,35 @@ import React, { useState } from "react";
 import Input from "../Input";
 import Button from "../Button";
 import * as C from "./styles";
-import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
-interface AuthData {
-  signup?: (email: string, password: string) => string;
-}
+
 
 const SignupForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [emailConf, setEmailConf] = useState("");
   const [senha, setSenha] = useState("");
   const [error, setError] = useState<string>("");
-  const navigate = useNavigate();
-
-  const authData = useAuth();
 
   //Erros de criação
   const handleSignup = () => {
     if (!email || !emailConf || !senha) {
       setError("Preencha todos os campos");
-    } else if (email !== emailConf) {
-      setError("Os campos de email precisam ser iguais");
-    } else {
-      // Caso não haja erro ele salvará os dados
-      if (authData != null && authData.signup) {
-        try {
-          const res = authData.signup(email, senha);
-          alert("Usuário cadastrado com sucesso!");
-          navigate("/");
-        } catch (e) {
-          setError("Função de cadastro não encontrada");
-        }
-      }
+      return;
     }
+
+    let formData = {"email" : email,"senha": senha};
+    sessionStorage.setItem("usuario_bd", JSON.stringify(formData));
+
+    Swal.fire(
+      'Sucesso',
+      'Conta criada com sucesso.',
+      'success'
+    ).then(() => {
+      window.location.href = "/";
+    });
+
   };
 
   return (
