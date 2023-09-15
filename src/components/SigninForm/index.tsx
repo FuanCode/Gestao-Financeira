@@ -3,13 +3,13 @@ import Input from "../Input";
 import Button from "../Button";
 import * as C from "./styles";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../components/hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 interface AuthData {
   signin?: (email: string, password: string) => string;
 }
 
-const Signin: React.FC = () => {
+const SigninForm: React.FC = () => {
 
   const authData = useAuth();
 
@@ -65,4 +65,4 @@ const Signin: React.FC = () => {
   );
 };
 
-export default Signin;
+export default SigninForm;

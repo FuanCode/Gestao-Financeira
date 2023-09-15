@@ -5,7 +5,7 @@ import App from './App';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Home from './routes/Home/Home';
 import Login from './routes/Login/Login';
-
+import Signup from './routes/Signup/Signup';
 
 const routes = [
   {
@@ -18,6 +18,10 @@ const routes = [
       {
         path: "/home",
         element: <Home/>
+      },
+      {
+        path: "/signup",
+        element: <Signup/>
       },
     ]
   }

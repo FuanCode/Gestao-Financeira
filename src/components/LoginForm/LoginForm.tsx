@@ -1,4 +1,4 @@
-import Signin from "../Signin"
+import Signin from "../SigninForm"
 
 
 const LoginForm = () => {

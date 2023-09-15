@@ -3,13 +3,13 @@ import Input from "../Input";
 import Button from "../Button";
 import * as C from "./styles";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../components/hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 interface AuthData {
   signup?: (email: string, password: string) => string;
 }
 
-const Signup: React.FC = () => {
+const SignupForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [emailConf, setEmailConf] = useState("");
   const [senha, setSenha] = useState("");
@@ -79,4 +79,4 @@ const Signup: React.FC = () => {
   );
 };
 
-export default Signup;
+export default SignupForm;
