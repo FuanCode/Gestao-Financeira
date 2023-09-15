@@ -20,20 +20,20 @@ export const InputArea = ({ onAdd }: Props) => {
   const handleAddEvent = () => {
     let errors: string[] = [];
 
-    if(isNaN(new Date(dateField).getTime())) {
+    if (isNaN(new Date(dateField).getTime())) {
       errors.push('Data inválida!');
     }
-    if(!categoryKeys.includes(categoryField)) {
+    if (!categoryKeys.includes(categoryField)) {
       errors.push('Tipo inválido!');
     }
-    if(titleField === '') {
+    if (titleField === '') {
       errors.push('Produto vazio!');
     }
-    if(valueField <= 0) {
+    if (valueField <= 0) {
       errors.push('Valor inválido!');
     }
 
-    if(errors.length > 0) {
+    if (errors.length > 0) {
       alert(errors.join("\n"));
     } else {
       onAdd({
@@ -53,39 +53,60 @@ export const InputArea = ({ onAdd }: Props) => {
     setValueField(0);
   }
 
-  const onChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const newValue = e.currentTarget.value; 
-  }
-  
+
+
   return (
-      <C.Container>
-        <C.InputLabel>
-          <C.InputTitle>Data</C.InputTitle>
-          <C.Input type="date" value={dateField} onChange={(e: React.FormEvent<HTMLInputElement>) => setDateField(e.target.value )} />
-        </C.InputLabel>
-        <C.InputLabel>
-          <C.InputTitle>Tipo</C.InputTitle>
-          <C.Select value={categoryField} onChange={e => setCategoryField(e.target.value)}>
-            <>
-              <option></option>
-              {categoryKeys.map((key, index) => (
-                <option key={index} value={key}>{categories[key].title}</option>
-              ))}
-            </>
-          </C.Select>
-        </C.InputLabel>
-        <C.InputLabel>
-          <C.InputTitle>Produto</C.InputTitle>
-          <C.Input type="text" value={titleField} onChange={e => setTitleField(e.target.value)} />
-        </C.InputLabel>
-        <C.InputLabel>
-          <C.InputTitle>Valor</C.InputTitle>
-          <C.Input type="number" value={valueField} onChange={e => setValueField(parseFloat(e.target.value))} />
-        </C.InputLabel>
-        <C.InputLabel>
-          <C.InputTitle>&nbsp;</C.InputTitle>
-          <C.Button onClick={handleAddEvent}>Adicionar</C.Button>
-        </C.InputLabel>
-      </C.Container>
+    <C.Container>
+      <C.InputLabel>
+        <C.InputTitle>Data</C.InputTitle>
+        <C.Input
+          type="date"
+          value={dateField}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDateField(e.target.value)}
+        />
+      </C.InputLabel>
+      <C.InputLabel>
+        <C.InputTitle>Tipo</C.InputTitle>
+
+        <C.Select
+          value={categoryField}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategoryField(e.target.value)}
+        >
+          <>
+            <option></option>
+            {categoryKeys.map((key, index) => (
+              <option key={index} value={key}>{categories[key].title}</option>
+            ))}
+          </>
+        </C.Select>
+      </C.InputLabel>
+      <C.InputLabel>
+        <C.InputTitle>Produto</C.InputTitle>
+        <C.Input
+          type="text"
+          value={titleField}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitleField(e.target.value)}
+        />
+      </C.InputLabel>
+      <C.InputLabel>
+        <C.InputTitle>Valor</C.InputTitle>
+        <C.Input
+          type="number"
+          value={valueField}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const newValue = parseFloat(e.target.value);
+            if (!isNaN(newValue)) {
+              setValueField(newValue);
+            } else {
+              setValueField(0);
+            }
+          }}
+        />
+      </C.InputLabel>
+      <C.InputLabel>
+        <C.InputTitle>&nbsp;</C.InputTitle>
+        <C.Button onClick={handleAddEvent}>Adicionar</C.Button>
+      </C.InputLabel>
+    </C.Container>
   );
 }
